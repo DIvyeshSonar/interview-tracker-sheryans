@@ -544,25 +544,74 @@ a.btn {
 }
 
 .card {
+  --card-accent: var(--gold);
+  position: relative;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--bg-elev);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 18px 20px 18px 23px;
+  border-radius: 15px;
+  background:
+    linear-gradient(110deg, color-mix(in srgb, var(--card-accent) 7%, transparent), transparent 44%),
+    var(--bg-elev);
   border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--card-accent);
+  content: "";
+  opacity: 0.85;
+}
+
+.card-dsa { --card-accent: var(--dsa); }
+.card-git { --card-accent: var(--git); }
+.card-tech { --card-accent: var(--tech); }
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--card-accent) 40%, var(--line-strong));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-main {
+  min-width: 0;
+  align-self: center;
+}
+
+.card-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
 .card h3 {
-  margin: 0 0 8px;
-  font-size: 1.02rem;
+  min-width: 0;
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.card-updated {
+  flex-shrink: 0;
+  color: var(--faint);
+  font-size: 12px;
 }
 
 .meta {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .notes {
@@ -572,19 +621,40 @@ a.btn {
   line-height: 1.5;
 }
 
+.card-notes {
+  max-width: 72ch;
+}
+
 .card-actions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-end;
+  justify-content: center;
 }
 
 .card-actions select {
-  background: var(--bg);
+  background: rgba(20, 17, 14, 0.72);
   border: 1px solid var(--line-strong);
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 9px 11px;
   min-width: 140px;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.card-actions select:focus-visible,
+.card .btn:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-soft);
+}
+
+.card .btn {
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.card .btn:active {
+  transform: translateY(1px);
 }
 
 .empty {
@@ -638,6 +708,11 @@ a.btn {
   .card-actions {
     flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
+  }
+
+  .card-topline {
+    align-items: flex-start;
   }
 
   .stats {
@@ -649,6 +724,20 @@ a.btn {
   .app { width: min(100% - 20px, 1180px); padding-top: 18px; }
   .stats { grid-template-columns: 1fr; }
   .brand h1 { font-size: 1.35rem; }
+  .card-topline {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .card-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .card-actions select {
+    width: 100%;
+  }
+  .card-actions .btn-row {
+    justify-content: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

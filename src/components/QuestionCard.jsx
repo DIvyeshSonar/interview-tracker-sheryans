@@ -12,9 +12,12 @@ const statusClass = {
 
 export default function QuestionCard({ question, onStatus, onDelete }) {
   return (
-    <article className="card">
-      <div>
-        <h3>{question.title}</h3>
+    <article className={`card card-${categoryClass[question.category] || "default"}`}>
+      <div className="card-main">
+        <div className="card-topline">
+          <h3>{question.title}</h3>
+          <span className="card-updated">Updated {formatDate(question.updatedAt)}</span>
+        </div>
         <div className="meta">
           <span className={`tone ${categoryClass[question.category]}`}>{question.category}</span>
           <span className={`tone ${difficultyClass[question.difficulty]}`}>
@@ -22,8 +25,7 @@ export default function QuestionCard({ question, onStatus, onDelete }) {
           </span>
           <span className={`tone ${statusClass[question.status]}`}>{question.status}</span>
         </div>
-        {question.notes ? <p className="notes">{question.notes}</p> : null}
-        <p className="notes">Updated {formatDate(question.updatedAt)}</p>
+        {question.notes ? <p className="notes card-notes">{question.notes}</p> : null}
       </div>
       <div className="card-actions">
         <label className="sr-only" htmlFor={`status-${question.id}`}>
