@@ -354,6 +354,68 @@ button {
 .tone.medium { background: var(--warn-soft); color: var(--warn); }
 .tone.hard { background: var(--danger-soft); color: var(--danger); }
 
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-link.active {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--bg-soft);
+}
+
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.save-toast {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--good-soft);
+  color: var(--good);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.save-meta {
+  margin: 12px 0 0;
+  color: var(--faint);
+  font-size: 12px;
+}
+
+.form-page .lede {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.form-panel {
+  max-width: 640px;
+}
+
 .btn {
   border: 1px solid transparent;
   border-radius: 10px;
@@ -499,36 +561,6 @@ button {
   color: var(--muted);
 }
 
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 8, 6, 0.72);
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  z-index: 20;
-}
-
-.modal {
-  width: min(560px, 100%);
-  background: var(--bg-elev);
-  border: 1px solid var(--line-strong);
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: var(--shadow);
-}
-
-.modal h2 {
-  margin: 0 0 4px;
-  font-family: var(--serif);
-}
-
-.modal .lede {
-  margin: 0 0 16px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -553,6 +585,10 @@ button {
 
   .topbar {
     flex-direction: column;
+  }
+
+  .nav-links {
+    width: 100%;
   }
 
   .card-actions {

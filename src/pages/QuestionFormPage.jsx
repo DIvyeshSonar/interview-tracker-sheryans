@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CATEGORIES, DIFFICULTIES, STATUSES } from "../constants";
 import { validateQuestion } from "../utils";
 
@@ -10,41 +11,82 @@ const empty = {
   notes: "",
 };
 
-export default function QuestionForm({ initial, onClose, onSave }) {
-  const [form, setForm] = useState(initial || empty);
+function toForm(question) {
+  if (!question) return empty;
+  return {
+    title: question.title,
+    category: question.category,
+    difficulty: question.difficulty,
+    status: question.status,
+    notes: question.notes || "",
+  };
+}
+
+export default function QuestionFormPage({ questions, onSave }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const existing = useMemo(
+    () => (id ? questions.find((q) => q.id === id) : null),
+    [id, questions]
+  );
+
+  const [form, setForm] = useState(() => toForm(existing));
   const [errors, setErrors] = useState({});
+  const [savedFlash, setSavedFlash] = useState(false);
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    setForm(toForm(existing));
+    setErrors({});
+    setSavedFlash(false);
+  }, [id, existing]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  if (id && !existing) {
+    return (
+      <div className="empty">
+        <h3>Question not found</h3>
+        <p>That item may have been deleted, or the link is out of date.</p>
+        <Link to="/questions" className="btn btn-primary">
+          Back to work queue
+        </Link>
+      </div>
+    );
+  }
 
   function submit(e) {
     e.preventDefault();
     const nextErrors = validateQuestion(form);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
-    onSave({
-      ...form,
-      title: form.title.trim(),
-      notes: form.notes.trim(),
-    });
+
+    onSave(
+      {
+        title: form.title.trim(),
+        category: form.category,
+        difficulty: form.difficulty,
+        status: form.status,
+        notes: form.notes.trim(),
+      },
+      existing?.id
+    );
+    setSavedFlash(true);
+    window.setTimeout(() => navigate("/questions"), 650);
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose} role="presentation">
-      <form
-        className="modal"
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={submit}
-        noValidate
-      >
-        <h2>{initial?.id ? "Edit question" : "Add a question"}</h2>
+    <section className="form-page">
+      <div className="list-head">
+        <div>
+          <p className="kicker">Question tracker</p>
+          <h2>{existing ? "Edit question" : "Add a question"}</h2>
+        </div>
+        <Link to="/questions" className="btn btn-ghost">
+          Back to queue
+        </Link>
+      </div>
+
+      <form className="panel panel-pad form-panel" onSubmit={submit} noValidate>
         <p className="lede">
           Track DSA, Git, and technical prompts for this week. Required fields are marked.
         </p>
@@ -107,13 +149,19 @@ export default function QuestionForm({ initial, onClose, onSave }) {
 
         <div className="btn-row">
           <button className="btn btn-primary" type="submit">
-            {initial?.id ? "Save changes" : "Add question"}
+            {existing ? "Save changes" : "Add question"}
           </button>
-          <button className="btn btn-ghost" type="button" onClick={onClose}>
+          <Link to="/questions" className="btn btn-ghost">
             Cancel
-          </button>
+          </Link>
         </div>
+
+        {savedFlash ? (
+          <p className="save-toast" role="status">
+            Saved — opening work queue…
+          </p>
+        ) : null}
       </form>
-    </div>
+    </section>
   );
 }

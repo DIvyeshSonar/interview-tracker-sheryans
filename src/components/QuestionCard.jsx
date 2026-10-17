@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { STATUSES } from "../constants";
 import { formatDate } from "../utils";
 
@@ -9,7 +10,7 @@ const statusClass = {
   Pending: "idle",
 };
 
-export default function QuestionCard({ question, onStatus, onEdit, onDelete }) {
+export default function QuestionCard({ question, onStatus, onDelete }) {
   return (
     <article className="card">
       <div>
@@ -40,9 +41,9 @@ export default function QuestionCard({ question, onStatus, onEdit, onDelete }) {
           ))}
         </select>
         <div className="btn-row">
-          <button className="btn btn-ghost" type="button" onClick={() => onEdit(question)}>
+          <Link to={`/questions/${question.id}/edit`} className="btn btn-ghost">
             Edit
-          </button>
+          </Link>
           <button className="btn btn-danger" type="button" onClick={() => onDelete(question.id)}>
             Delete
           </button>
