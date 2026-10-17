@@ -270,6 +270,25 @@ button {
   margin-bottom: 22px;
 }
 
+.machine-form {
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.machine-form.is-saved {
+  animation: plan-saved 700ms ease-out;
+}
+
+@keyframes plan-saved {
+  0% {
+    border-color: var(--good);
+    box-shadow: 0 0 0 4px var(--good-soft), var(--shadow);
+  }
+  100% {
+    border-color: var(--line);
+    box-shadow: var(--shadow);
+  }
+}
+
 .kicker {
   margin: 0 0 4px;
   color: var(--gold);
@@ -390,6 +409,9 @@ a.btn {
 }
 
 .save-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 12px 0 0;
   padding: 10px 12px;
   border-radius: 10px;
@@ -397,6 +419,28 @@ a.btn {
   color: var(--good);
   font-size: 13px;
   font-weight: 600;
+  animation: toast-in 240ms ease-out both;
+}
+
+.save-check {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(111, 191, 138, 0.2);
+  font-size: 12px;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .save-meta {
@@ -605,4 +649,15 @@ a.btn {
   .app { width: min(100% - 20px, 1180px); padding-top: 18px; }
   .stats { grid-template-columns: 1fr; }
   .brand h1 { font-size: 1.35rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

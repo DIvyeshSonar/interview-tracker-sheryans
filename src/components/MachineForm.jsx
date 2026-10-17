@@ -55,7 +55,11 @@ export default function MachineForm({ machine, onSave }) {
   }
 
   return (
-    <form className="panel panel-pad" onSubmit={submit} noValidate>
+    <form
+      className={`panel panel-pad machine-form${savedFlash ? " is-saved" : ""}`}
+      onSubmit={submit}
+      noValidate
+    >
       <p className="kicker">Machine coding</p>
       <h2>This week’s build</h2>
       <p className="lede">
@@ -86,7 +90,9 @@ export default function MachineForm({ machine, onSave }) {
         <div className="field">
           <label>Current state</label>
           <div>
-            <span className={`tone ${machineStatusTone(draft.status)}`}>{draft.status}</span>
+            <span className={`tone machine-state ${machineStatusTone(draft.status)}`}>
+              {draft.status}
+            </span>
           </div>
         </div>
       </div>
@@ -109,6 +115,7 @@ export default function MachineForm({ machine, onSave }) {
       </div>
       {savedFlash ? (
         <p className="save-toast" role="status">
+          <span className="save-check" aria-hidden="true">✓</span>
           Machine-coding plan saved.
         </p>
       ) : null}
